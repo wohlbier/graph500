@@ -1,7 +1,12 @@
 CFLAGS = -Drestrict=__restrict__ -O3 -DGRAPH_GENERATOR_MPI -DREUSE_CSR_FOR_VALIDATION -I../aml
 LDFLAGS = -lpthread
-MPICC = mpicc
+#MPICC = mpicc
+MPICC = mpiicc
+CFLAGS += -DPROCS_PER_NODE_NOT_POWER_OF_TWO
 
+# 8 nodes => 28
+# SKIP_VALIDATION=1
+# mpirun ./graph500_reference_bfs 25
 all: graph500_reference_bfs_sssp graph500_reference_bfs 
 #graph500_custom_bfs graph500_custom_bfs_sssp
 
