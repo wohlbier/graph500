@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#PBS -N graph500
+#PBS -l select=14:ncpus=36:mpiprocs=36
+#PBS -l walltime=1:00:00
+#PBS -j oe
+#PBS -A ARLAP96070PET
+#PBS -q debug
+
+module unload mpt/2.14
+module switch gcc-compilers gcc-compilers/6.2.0
+module unload intel-compilers/15.0.3.187 
+module load intel-compilers/2018_update1 
+module load intel-mpi-16/5.1.3.210
+module load /home/wohlbier/devel/packages/spack/share/spack/modules/linux-sles11-x86_64/papi-5.5.1-gcc-6.2.0-7npqnec
+module list
+
+cd $PBS_O_WORKDIR
+export OMP_NUM_THREADS=1
+
+export PATH=/home/wohlbier/devel/packages/arm/forge/bin:$PATH
+export SKIP_VALIDATION=1
+SCALE=26 #toy
+SCALE=29 #mini
+SCALE=32 #small
+#SCALE=36 #medium
+N=504
+map --profile -n $N ./graph500_reference_bfs $SCALE
+ARM_MAP_BANDWIDTH_BOUND=1 map --profile -n $N ./graph500_reference_bfs $SCALE
